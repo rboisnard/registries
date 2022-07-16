@@ -1,0 +1,33 @@
+---
+product:
+  default: registries
+  description: "layered service registering"
+  choices:
+    registries:
+      short: registries
+      long: registries
+      
+buildType:
+  default: debug
+  description: "build mode"
+  choices:
+    asan:
+      short: Asan
+      long: Asan
+      buildType: Asan
+    lsan:
+      short: Lsan
+      long: Lsan
+      buildType: Lsan
+    gcov:
+      short: GCov
+      long: GCov
+      buildType: GCov
+    debug:
+      short: Debug
+      long: Debug
+      buildType: Debug
+    release:
+      short: Release
+      long: Release
+      buildType: Release
