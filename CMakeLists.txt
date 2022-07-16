@@ -6,10 +6,16 @@ project(
 )
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
+
+# out of source build
 include(OutOfSourceCheck)
 check_out_of_source_build()
 
+# sanitizers and gcov
 include(CodeQuality)
+
+# GTest & GMock
+find_package(GTest)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)

@@ -10,6 +10,7 @@ namespace txn {
 
 class IRegistry {
 public:
+  virtual ~IRegistry() = default;
   virtual void registerStandard(const std::string& serviceName, std::shared_ptr<IStandardWrapper> pWrapper) = 0;
   virtual void invokeStandard(const std::string serviceName, const StandardPayload& payload) = 0;
   virtual void registerToken(const std::string& serviceName, std::shared_ptr<ITokenWrapper> pWrapper) = 0;

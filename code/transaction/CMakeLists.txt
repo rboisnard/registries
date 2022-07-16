@@ -22,3 +22,5 @@ target_include_directories(transaction
   PUBLIC
   include
 )
+
+add_subdirectory(test)
