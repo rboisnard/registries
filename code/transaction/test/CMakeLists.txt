@@ -1,4 +1,3 @@
-enable_testing()
 add_executable(test_direct_registry
   test_direct_registry.cpp
 )

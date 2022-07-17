@@ -16,6 +16,7 @@ include(CodeQuality)
 
 # GTest & GMock
 find_package(GTest)
+include(CTest)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
