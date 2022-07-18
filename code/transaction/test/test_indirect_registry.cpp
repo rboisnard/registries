@@ -1,21 +1,43 @@
-//#include <dlfcn.h>
+#include <dlfcn.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include "txn/Registry.h"
 
-#include "ExampleServices.h"
-
-class DirectRegistry : public ::testing::Test {
+class IndirectRegistry : public ::testing::Test {
 protected:
   txn::Registry _registry;
+  void* _handle;
+
+  IndirectRegistry() {}
 
   void SetUp() override {
-    registerServices(_registry);
+    _handle = dlopen("libexampleservices.so", RTLD_NOW);
+    if (!_handle) {
+      // blocking error
+      ASSERT_TRUE(false);
+    }
+    // reset errors
+    dlerror();
+
+    txn::initializer_t initializer = (txn::initializer_t)dlsym(_handle, "registerServices");
+    if (dlerror()) {
+      dlclose(_handle);
+      // blocking error
+      ASSERT_TRUE(false);
+    }
+
+    initializer(_registry);
+  }
+
+  void TearDown() override {
+    if (_handle) {
+      dlclose(_handle);
+    }
   }
 };
 
-TEST_F(DirectRegistry, standard_payload) {
+TEST_F(IndirectRegistry, standard_payload) {
   const txn::StandardPayload payload("standard_payload");
 
   txn::Status status1 = _registry.invokeStandard("serv1", payload);
@@ -31,7 +53,7 @@ TEST_F(DirectRegistry, standard_payload) {
   EXPECT_THAT(status3.message(), ::testing::StrEq("serviceB:methodA:standard_payload:-"));
 }
 
-TEST_F(DirectRegistry, token_payload) {
+TEST_F(IndirectRegistry, token_payload) {
   const txn::TokenPayload payload("token_payload", "token");
 
   txn::Status status = _registry.invokeToken("serv4", payload);
@@ -39,7 +61,7 @@ TEST_F(DirectRegistry, token_payload) {
   EXPECT_THAT(status.message(), ::testing::StrEq("serviceB:methodB:token_payload:token:-"));
 }
 
-TEST_F(DirectRegistry, empty_token_payload) {
+TEST_F(IndirectRegistry, empty_token_payload) {
   txn::TokenPayload payload("token_payload");
   EXPECT_THAT(payload.token(), ::testing::StrEq(""));
 
@@ -51,7 +73,7 @@ TEST_F(DirectRegistry, empty_token_payload) {
   EXPECT_THAT(status.message(), ::testing::StrEq("serviceB:methodB:token_payload:set_token:-"));
 }
 
-TEST_F(DirectRegistry, custom_init_service) {
+TEST_F(IndirectRegistry, custom_init_service) {
   const txn::StandardPayload payload("standard_payload");
 
   txn::Status status = _registry.invokeStandard("serv5", payload);
@@ -59,7 +81,7 @@ TEST_F(DirectRegistry, custom_init_service) {
   EXPECT_THAT(status.message(), ::testing::StrEq("serviceC:methodA:standard_payload:internal:-"));
 }
 
-TEST_F(DirectRegistry, service_not_found) {
+TEST_F(IndirectRegistry, service_not_found) {
   const txn::StandardPayload standard_payload("standard_payload");
   txn::Status status1 = _registry.invokeStandard("unknown_service", standard_payload);
   EXPECT_FALSE(status1);
@@ -68,25 +90,3 @@ TEST_F(DirectRegistry, service_not_found) {
   txn::Status status2 = _registry.invokeToken("unknown_service", token_payload);
   EXPECT_FALSE(status2);
 }
-
-//int main(
-//  [[maybe_unused]] int argc,
-//  [[maybe_unused]] char* argv[]
-//) {
-//  // TODO: get lib name from config
-//  void* handle = dlopen("libservice.so", RTLD_NOW);
-//  if (!handle) {
-//    return 1;
-//  }
-//  dlerror();  // reset errors
-//
-//  // TODO: get init function name from config
-//  txn::initializer_t initializer = (txn::initializer_t)dlsym(handle, "lib_init");
-//  if (dlerror()) {
-//    dlclose(handle);
-//    return 1;
-//  }
-//
-//  txn::Registry registry;
-//  initializer(registry);
-//}

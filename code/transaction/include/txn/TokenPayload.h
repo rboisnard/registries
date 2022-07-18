@@ -12,7 +12,7 @@ public:
   ~TokenPayload();
 
   const std::string data() const;
-  std::string token();
+  std::string token() const;
   void setToken(std::string token);
 
 private:

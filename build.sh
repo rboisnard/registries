@@ -60,6 +60,7 @@ capture_coverage() {
     '/usr/include/c++/11/*'                     \
     '/usr/include/gtest/*'                      \
     '/usr/include/gtest/internal/*'             \
+    '/usr/include/gmock/*'                      \
     -o ${SCRIPT_PATH}/builds/$1/gcov.info
 
     runcheck "coverage report" genhtml -o builds/coverage_report ${SCRIPT_PATH}/builds/$1/gcov.info
