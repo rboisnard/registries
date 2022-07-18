@@ -14,7 +14,7 @@ check_out_of_source_build()
 # sanitizers and gcov
 include(CodeQuality)
 
-# GTest & GMock
+# Google Test
 find_package(GTest)
 include(CTest)
 

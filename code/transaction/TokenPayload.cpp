@@ -12,7 +12,7 @@ const std::string TokenPayload::data() const {
   return this->_data;
 }
 
-std::string TokenPayload::token() {
+std::string TokenPayload::token() const {
   return this->_token;
 }
 

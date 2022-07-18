@@ -4,7 +4,9 @@
 namespace txn {
 
 class Service {
-
+public:
+  Service();
+  ~Service();
 };
 
 } // namespace txn
