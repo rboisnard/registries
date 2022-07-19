@@ -4,12 +4,12 @@
 
 ## needed setup
 * standard build tools (gcc)
-* cmake (+makke or ninja)
-* gtest
+* cmake (+make or ninja)
+* gtest & gmock
 * lcov
 
 ## how to build
 * run `build.sh` for a multi-variant build which runs all tests
-* per-variant builds form VS Code
+* per-variant builds from VS Code
 
 ## how to run
