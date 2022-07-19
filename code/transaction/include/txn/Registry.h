@@ -49,7 +49,7 @@ protected:
 };
 
 template <typename T>
-void Registry::registerStandard(const std::string& serviceName, Status (T::*method)(const StandardPayload&)) {
+inline void Registry::registerStandard(const std::string& serviceName, Status (T::*method)(const StandardPayload&)) {
   this->_pImpl->registerStandard(serviceName, std::make_shared<StandardWrapper<T>>(method));
 }
 
@@ -72,7 +72,7 @@ protected:
 };
 
 template <typename T>
-void Registry::registerToken(const std::string& serviceName, Status (T::*method)(const TokenPayload&)) {
+inline void Registry::registerToken(const std::string& serviceName, Status (T::*method)(const TokenPayload&)) {
   this->_pImpl->registerToken(serviceName, std::make_shared<TokenWrapper<T>>(method));
 }
 
