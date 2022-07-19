@@ -4,7 +4,9 @@
 
 TARGETS="
   code/transaction:transaction
+  code/transaction/test:test_status
   code/transaction/test:test_direct_registry
+  code/transaction/test:test_indirect_registry
 "
 
 ### functions
@@ -58,13 +60,19 @@ capture_coverage() {
     '/usr/include/c++/11/bits/*'                \
     '/usr/include/c++/11/ext/*'                 \
     '/usr/include/c++/11/*'                     \
+    '/usr/include/c++/12/bits/*'                \
+    '/usr/include/c++/12/ext/*'                 \
+    '/usr/include/c++/12/x86_64-redhat-linux/bits/*' \
+    '/usr/include/c++/12/*'                     \
     '/usr/include/gtest/*'                      \
     '/usr/include/gtest/internal/*'             \
     '/usr/include/gmock/*'                      \
     -o ${SCRIPT_PATH}/builds/$1/gcov.info
 
     runcheck "coverage report" genhtml -o builds/coverage_report ${SCRIPT_PATH}/builds/$1/gcov.info
-    echo "\n==> open report file://${SCRIPT_PATH}/builds/coverage_report/index.html\n"
+    echo
+    echo "==> open report file://${SCRIPT_PATH}/builds/coverage_report/index.html"
+    echo
   fi
 }
 
