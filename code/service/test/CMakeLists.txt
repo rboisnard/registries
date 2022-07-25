@@ -1,3 +1,51 @@
+# test_status
+add_executable(test_status_layer2)
+target_sources(test_status_layer2
+  PRIVATE
+  test_status.cpp
+)
+target_link_libraries(test_status_layer2
+  GTest::gtest_main
+  service
+)
+add_test(
+  NAME test_status_layer2
+  COMMAND test_status_layer2
+)
+
+# test_payloads
+add_executable(test_payloads_layer2)
+target_sources(test_payloads_layer2
+  PRIVATE
+  test_payloads.cpp
+)
+target_link_libraries(test_payloads_layer2
+  GTest::gtest_main
+  service
+)
+add_test(
+  NAME test_payloads_layer2
+  COMMAND test_payloads_layer2
+)
+
+# test_adapters
+add_executable(test_adapters_layer2)
+target_sources(test_adapters_layer2
+  PRIVATE
+  test_adapters.cpp
+  ../include/TxnStandardPayloadAdapter.h
+  ../include/TxnStatusAdapter.h
+  ../include/TxnTokenPayloadAdapter.h
+)
+target_link_libraries(test_adapters_layer2
+  GTest::gtest_main
+  service
+)
+add_test(
+  NAME test_adapters_layer2
+  COMMAND test_adapters_layer2
+)
+
 # helper library exampleservices
 add_library(exampleservices_layer2 SHARED)
 target_sources(exampleservices_layer2
@@ -11,32 +59,6 @@ target_link_libraries(exampleservices_layer2
   service
 )
 
-# helper library exampledirect
-add_library(exampledirect SHARED)
-target_sources(exampledirect
-  PRIVATE
-  ExampleDirect.cpp
-
-  PUBLIC
-  ExampleDirect.h
-)
-target_link_libraries(exampledirect
-  exampleservices_layer2
-)
-
-# helper library exampleindirect
-add_library(exampleindirect SHARED)
-target_sources(exampleindirect
-  PRIVATE
-  ExampleIndirect.cpp
-
-  PUBLIC
-  ExampleIndirect.h
-)
-target_link_libraries(exampleindirect
-  transaction
-)
-
 # test_direct_registry
 add_executable(test_direct_registry_layer2)
 target_sources(test_direct_registry_layer2
@@ -46,7 +68,7 @@ target_sources(test_direct_registry_layer2
 )
 target_link_libraries(test_direct_registry_layer2
   GTest::gtest_main
-  exampledirect
+  exampleservices_layer2
 )
 add_test(
   NAME test_direct_registry_layer2
@@ -67,13 +89,17 @@ target_sources(test_indirect_registry_layer2
 )
 target_link_libraries(test_indirect_registry_layer2
   GTest::gtest_main
-  exampleindirect
+  transaction
 )
 add_test(
   NAME test_indirect_registry_layer2
   COMMAND test_indirect_registry_layer2
 )
-
+set(env_vars "")
+string(JOIN ";" env_vars ${env_vars} "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/service:${CMAKE_BINARY_DIR}/code/service/test")
+string(JOIN ";" env_vars ${env_vars} "APP_LIBRARY_NAME=libexampleservices_layer2.so")
+string(JOIN ";" env_vars ${env_vars} "APP_INITILIZER_NAME=registerSvcServices")
+string(JOIN ";" env_vars ${env_vars} "APP_FINALIZER_NAME=finalizeServices")
 set_property(TEST test_indirect_registry_layer2
-  PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/service\\$<SEMICOLON>${CMAKE_BINARY_DIR}/code/service/test;APP_LIBRARY_NAME=libexampleservices_layer2.so;APP_INITILIZER_NAME=registerSvcServices;APP_FINALIZER_NAME=finalizeServices"
+  PROPERTY ENVIRONMENT ${env_vars}
 )

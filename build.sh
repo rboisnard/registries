@@ -3,11 +3,16 @@
 ### conf
 
 TARGETS="
-  code/service:service
   code/transaction:transaction
   code/transaction/test:test_status
   code/transaction/test:test_direct_registry
   code/transaction/test:test_indirect_registry
+  code/service:service
+  code/service/test:test_status_layer2
+  code/service/test:test_payloads_layer2
+  code/service/test:test_adapters_layer2
+  code/service/test:test_direct_registry_layer2
+  code/service/test:test_indirect_registry_layer2
 "
 
 ### functions
@@ -80,7 +85,7 @@ capture_coverage() {
 build_for_type() {
   echo "building for type $1"
 
-  runcheck "cmake configuration for $1"        \
+  runcheck "cmake configuration for $1"       \
     cmake                                     \
     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
     -DCMAKE_BUILD_TYPE:STRING=$1              \
@@ -88,7 +93,7 @@ build_for_type() {
     -B${SCRIPT_PATH}/builds/$1                \
     -G "Unix\ Makefiles"
 
-  runcheck "cmake build for $1"                \
+  runcheck "cmake build for $1"               \
     cmake                                     \
     --build ${SCRIPT_PATH}/builds/$1          \
     --config $1                               \
