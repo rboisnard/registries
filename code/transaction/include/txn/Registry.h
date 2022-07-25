@@ -15,14 +15,14 @@ public:
   ~Registry();
 
   template <typename T>
-  void registerStandard(const std::string& serviceName, Status (T::*method)(const StandardPayload&));
+  void registerStandard(const std::string& serviceName, Status (T::*method)(StandardPayload&));
 
-  Status invokeStandard(const std::string& serviceName, const StandardPayload& payload);
+  Status invokeStandard(const std::string& serviceName, StandardPayload& payload);
 
   template <typename T>
-  void registerToken(const std::string& serviceName, Status (T::*method)(const TokenPayload&));
+  void registerToken(const std::string& serviceName, Status (T::*method)(TokenPayload&));
 
-  Status invokeToken(const std::string& serviceName, const TokenPayload& payload);
+  Status invokeToken(const std::string& serviceName, TokenPayload& payload);
 
 private:
   template <class> class StandardWrapper;
@@ -34,22 +34,22 @@ private:
 template <typename T>
 class Registry::StandardWrapper : public IStandardWrapper {
 public:
-  StandardWrapper(Status (T::*method)(const StandardPayload&)) : _method(method) {}
+  StandardWrapper(Status (T::*method)(StandardPayload&)) : _method(method) {}
 
-  std::shared_ptr<Service> createService() {
+  std::shared_ptr<StandardService> createService() {
     return std::make_shared<T>();
   }
 
 protected:
-  Status invokeStandard(Service& service, const StandardPayload& payload) {
+  Status invokeStandard(StandardService& service, StandardPayload& payload) {
     return (static_cast<T&>(service).*_method)(payload);
   }
 
-  Status (T::*_method)(const StandardPayload&);
+  Status (T::*_method)(StandardPayload&);
 };
 
 template <typename T>
-inline void Registry::registerStandard(const std::string& serviceName, Status (T::*method)(const StandardPayload&)) {
+inline void Registry::registerStandard(const std::string& serviceName, Status (T::*method)(StandardPayload&)) {
   this->_pImpl->registerStandard(serviceName, std::make_shared<StandardWrapper<T>>(method));
 }
 
@@ -57,27 +57,28 @@ inline void Registry::registerStandard(const std::string& serviceName, Status (T
 template <typename T>
 class Registry::TokenWrapper : public ITokenWrapper {
 public:
-  TokenWrapper(Status (T::*method)(const TokenPayload&)) : _method(method) {}
+  TokenWrapper(Status (T::*method)(TokenPayload&)) : _method(method) {}
 
-  std::shared_ptr<Service> createService() {
+  std::shared_ptr<TokenService> createService() {
     return std::make_shared<T>();
   }
 
 protected:
-  Status invokeToken(Service& service, const TokenPayload& payload) {
+  Status invokeToken(TokenService& service, TokenPayload& payload) {
     return (static_cast<T&>(service).*_method)(payload);
   }
 
-  Status (T::*_method)(const TokenPayload&);
+  Status (T::*_method)(TokenPayload&);
 };
 
 template <typename T>
-inline void Registry::registerToken(const std::string& serviceName, Status (T::*method)(const TokenPayload&)) {
+inline void Registry::registerToken(const std::string& serviceName, Status (T::*method)(TokenPayload&)) {
   this->_pImpl->registerToken(serviceName, std::make_shared<TokenWrapper<T>>(method));
 }
 
 // other definitions
-typedef void (*initializer_t)(Registry&);
+typedef bool (*initializer_t)(Registry&);
+typedef bool (*finalizer_t)();
 
 } // namespace txn
 

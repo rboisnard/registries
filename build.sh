@@ -3,6 +3,7 @@
 ### conf
 
 TARGETS="
+  code/service:service
   code/transaction:transaction
   code/transaction/test:test_status
   code/transaction/test:test_direct_registry

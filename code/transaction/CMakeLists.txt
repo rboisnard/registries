@@ -3,10 +3,11 @@ target_sources(transaction
   PRIVATE
   Registry.cpp
   RegistryImpl.cpp
-  Service.cpp
   StandardPayload.cpp
+  StandardService.cpp
   Status.cpp
   TokenPayload.cpp
+  TokenService.cpp
   include/RegistryImpl.h
 
   PUBLIC
@@ -14,10 +15,11 @@ target_sources(transaction
   include/txn/IStandardWrapper.h
   include/txn/ITokenWrapper.h
   include/txn/Registry.h
-  include/txn/Service.h
   include/txn/StandardPayload.h
+  include/txn/StandardService.h
   include/txn/Status.h
   include/txn/TokenPayload.h
+  include/txn/TokenService.h
 )
 target_include_directories(transaction
   PUBLIC

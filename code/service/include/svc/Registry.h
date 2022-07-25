@@ -3,89 +3,119 @@
 
 #include <memory>
 
+#include "txn/Registry.h"
+
 #include "svc/IRegistry.h"
-#include "svc/ICallbackWrapper.h"
+#include "svc/IStandardWrapper.h"
+#include "svc/ITokenWrapper.h"
 
 namespace svc {
 
 class Registry {
 public:
-  Registry();
+  explicit Registry();
   ~Registry();
 
   template <typename T>
-  void registerCallback(ServiceList_t serviceNames, txn::Status (T::*method)(const txn::StandardPayload& payload));
+  void registerService(ServiceList serviceNames, Status (T::*method)(StandardPayload& payload));
+  txn::Status invoke(const std::string& serviceName, txn::StandardPayload& payload);
 
   template <typename T>
-  void registerCallback(ServiceList_t serviceNames, txn::Status (T::*method)(const txn::TokenPayload& payload));
+  void registerService(ServiceList serviceNames, Status (T::*method)(TokenPayload& payload));
+  txn::Status invoke(const std::string& serviceName, txn::TokenPayload& payload);
 
-  txn::Status invoke(const std::string& serviceName, Payload_t payload);
+  void setTxnRegistry(txn::Registry txnRegistry);
 
-  private:
-    template <class> class StandardWrapper;
-    template <class> class TokenWrapper;
-    std::shared_ptr<IRegistry> _pImpl;
+private:
+  template <typename> class StandardWrapper;
+  template <typename> class TokenWrapper;
+  std::shared_ptr<IRegistry> _pImpl;
+  txn::Registry _txnRegistry;
 };
+
+// global unique instance
+extern Registry registryInstance;
 
 // template for standard wrapper implementation
 template <typename T>
-class Registry::StandardWrapper : public ICallbackWrapper {
+class Registry::StandardWrapper : public IStandardWrapper {
 public:
-  StandardWrapper(txn::Status (T::*method)(const txn::StandardPayload& payload)) : _method(method) {}
+  StandardWrapper(Status (T::*method)(StandardPayload& payload)) : _method(method) {}
 
-  std::shared_ptr<Callback> createCallback(std::shared_ptr<txn::Service> pService) {
-    return std::make_shared<T>(pService);
+  std::shared_ptr<Service> createService() {
+    return std::make_shared<T>();
   }
 
 protected:
-  txn::Status invoke(Callback& callback, Payload_t payload) {
-    if (std::holds_alternative<const txn::StandardPayload&>(payload)) {
-      return (static_cast<T&>(callback.service()).*_method)(std::get<const txn::StandardPayload&>(payload));
-    }
-    // wrong payload type
-    // TODO: add error handling
-    return txn::Status(1, "wrong payload type");
+  Status invoke(Service& service, StandardPayload& payload) {
+    return (static_cast<T&>(service).*_method)(payload);
   }
 
-  txn::Status (T::*_method)(const txn::StandardPayload& payload);
+  Status (T::*_method)(StandardPayload& payload);
 };
 
 template <typename T>
-inline void Registry::registerCallback(ServiceList_t serviceNames, txn::Status (T::*method)(const txn::StandardPayload& payload)) {
-  this->_pImpl->registerCallback(serviceNames, std::make_shared<StandardWrapper<T>>(method));
+inline void Registry::registerService(ServiceList serviceNames, Status (T::*method)(StandardPayload& payload)) {
+
+  class TxnService : public txn::StandardService {
+  public:
+    txn::Status invoke(txn::StandardPayload& payload) {
+      return registryInstance.invoke(payload.serviceName(), payload);
+    }
+  };
+
+  this->_pImpl->registerService(serviceNames, std::make_shared<StandardWrapper<T>>(method));
+
+  for (ServiceList::iterator it = serviceNames.begin(); it != serviceNames.end(); ++it) {
+    this->_txnRegistry.registerStandard<TxnService>(*it, &TxnService::invoke);
+  }
 }
 
 // template for token wrapper implementation
 template <typename T>
-class Registry::TokenWrapper : public ICallbackWrapper {
+class Registry::TokenWrapper : public ITokenWrapper {
 public:
-  TokenWrapper(txn::Status (T::*method)(const txn::TokenPayload& payload)) : _method(method) {}
+  TokenWrapper(Status (T::*method)(TokenPayload& payload)) : _method(method) {}
 
-  std::shared_ptr<Callback> createCallback(std::shared_ptr<txn::Service> pService) {
-    return std::make_shared<T>(pService);
+  std::shared_ptr<Service> createService() {
+    return std::make_shared<T>();
   }
 
 protected:
-  txn::Status invoke(Callback& callback, Payload_t payload) {
-    if (std::holds_alternative<const txn::TokenPayload&>(payload)) {
-      return (static_cast<T&>(callback.service()).*_method)(std::get<const txn::TokenPayload&>(payload));
-    }
-    // wrong payload type
-    // TODO: add error handling
-    return txn::Status(1, "wrong payload type");
+  Status invoke(Service& service, TokenPayload& payload) {
+    return (static_cast<T&>(service).*_method)(payload);
   }
 
-  txn::Status (T::*_method)(const txn::TokenPayload& payload);
+  Status (T::*_method)(TokenPayload& payload);
 };
 
 template <typename T>
-inline void Registry::registerCallback(ServiceList_t serviceNames, txn::Status (T::*method)(const txn::TokenPayload& payload)) {
-  this->_pImpl->registerCallback(serviceNames, std::make_shared<TokenWrapper<T>>(method));
+inline void Registry::registerService(ServiceList serviceNames, Status (T::*method)(TokenPayload& payload)) {
+
+  class TxnService : public txn::TokenService {
+  public:
+    txn::Status invoke(txn::TokenPayload& payload) {
+      return registryInstance.invoke(payload.serviceName(), payload);
+    }
+  };
+
+  this->_pImpl->registerService(serviceNames, std::make_shared<TokenWrapper<T>>(method));
+
+  for (ServiceList::iterator it = serviceNames.begin(); it != serviceNames.end(); ++it) {
+    this->_txnRegistry.registerToken<TxnService>(*it, &TxnService::invoke);
+  }
 }
 
 // other definitions
 typedef void (*initializer_t)(Registry&);
+typedef bool (*finalizer_t)();
 
 } // namespace svc
+
+extern "C"
+bool initLibrary(txn::Registry& registry);
+
+extern "C"
+bool closeLibrary();
 
 #endif // _SVC_REGISTRY_H

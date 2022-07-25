@@ -1,6 +1,6 @@
-#include "txn/TokenPayload.h"
+#include "svc/TokenPayload.h"
 
-namespace txn {
+namespace svc {
 
 TokenPayload::TokenPayload(const std::string data)
     : TokenPayload(data, "") {}
@@ -28,4 +28,4 @@ void TokenPayload::setServiceName(std::string serviceName) {
   this->_serviceName = serviceName;
 }
 
-} // namespace txn
+} // namespace svc

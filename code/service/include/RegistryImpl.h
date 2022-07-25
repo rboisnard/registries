@@ -12,11 +12,14 @@ public:
   RegistryImpl();
   ~RegistryImpl();
 
-  void registerCallback(ServiceList_t serviceNames, std::shared_ptr<ICallbackWrapper> pWrapper) override;
-  txn::Status invoke(const std::string& serviceName, Payload_t payload) override;
+  void registerService(ServiceList serviceNames, std::shared_ptr<IStandardWrapper> pWrapper) override;
+  Status invoke(const std::string& serviceName, StandardPayload& payload) override;
+  void registerService(ServiceList serviceNames, std::shared_ptr<ITokenWrapper> pWrapper) override;
+  Status invoke(const std::string& serviceName, TokenPayload& payload) override;
 
 private:
-  std::map<std::string, std::shared_ptr<ICallbackWrapper>> _callbackMap;
+  std::map<std::string, std::shared_ptr<IStandardWrapper>> _standardMap;
+  std::map<std::string, std::shared_ptr<ITokenWrapper>> _tokenMap;
 };
 
 } // namespace svc

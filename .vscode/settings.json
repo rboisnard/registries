@@ -48,6 +48,12 @@
     "sstream": "cpp",
     "map": "cpp",
     "istream": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "any": "cpp",
+    "ctime": "cpp",
+    "set": "cpp",
+    "optional": "cpp",
+    "iomanip": "cpp",
+    "iostream": "cpp"
   }
 }

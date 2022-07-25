@@ -3,16 +3,16 @@
 
 #include <memory>
 
-#include "txn/Service.h"
 #include "txn/StandardPayload.h"
+#include "txn/StandardService.h"
 #include "txn/Status.h"
 
 namespace txn {
 
 class IStandardWrapper {
 public:
-  virtual Status invokeStandard(Service& service, const StandardPayload& payload) = 0;
-  virtual std::shared_ptr<Service> createService() = 0;
+  virtual Status invokeStandard(StandardService& service, StandardPayload& payload) = 0;
+  virtual std::shared_ptr<StandardService> createService() = 0;
 };
 
 } // namespace txn

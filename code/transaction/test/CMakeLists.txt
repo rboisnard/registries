@@ -60,4 +60,6 @@ add_test(
   COMMAND test_indirect_registry
 )
 
-set_property(TEST test_indirect_registry PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/transaction/test")
+set_property(TEST test_indirect_registry
+  PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/transaction/test"
+)

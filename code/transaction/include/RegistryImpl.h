@@ -14,9 +14,9 @@ public:
   ~RegistryImpl();
 
   void registerStandard(const std::string& serviceName, std::shared_ptr<IStandardWrapper> pWrapper) override;
-  Status invokeStandard(const std::string& serviceName, const StandardPayload& payload) override;
+  Status invokeStandard(const std::string& serviceName, StandardPayload& payload) override;
   void registerToken(const std::string& serviceName, std::shared_ptr<ITokenWrapper> pWrapper) override;
-  Status invokeToken(const std::string& serviceName, const TokenPayload& payload) override;
+  Status invokeToken(const std::string& serviceName, TokenPayload& payload) override;
 
 private:
   std::map<std::string, std::shared_ptr<IStandardWrapper>> _standardMap;

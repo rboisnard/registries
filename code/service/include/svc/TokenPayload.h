@@ -1,9 +1,9 @@
-#ifndef _TXN_TOKEN_PAYLOAD_H
-#define _TXN_TOKEN_PAYLOAD_H
+#ifndef _SVC_TOKEN_PAYLOAD_H
+#define _SVC_TOKEN_PAYLOAD_H
 
 #include <string>
 
-namespace txn {
+namespace svc {
 
 class TokenPayload {
 public:
@@ -24,6 +24,6 @@ private:
   std::string _serviceName;
 };
 
-} // namespace txn
+} // namespace svc
 
-#endif // _TXN_TOKEN_PAYLOAD_H
+#endif // _SVC_TOKEN_PAYLOAD_H

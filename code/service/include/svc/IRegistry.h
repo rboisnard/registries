@@ -1,24 +1,20 @@
 #ifndef _SVC_I_REGISTRY_H
 #define _SVC_I_REGISTRY_H
 
-#include <functional>
-#include <memory>
-#include <vector>
-
-#include "txn/Service.h"
-#include "txn/Status.h"
-
-#include "svc/ICallbackWrapper.h"
+#include "svc/IStandardWrapper.h"
+#include "svc/ITokenWrapper.h"
+#include "svc/ServiceList.h"
+#include "svc/Status.h"
 
 namespace svc {
 
-typedef std::vector<std::reference_wrapper<const std::string>> ServiceList_t;
-
-class IRegistry : public txn::Service {
+class IRegistry {
 public:
   virtual ~IRegistry() = default;
-  virtual void registerCallback(ServiceList_t serviceNames, std::shared_ptr<ICallbackWrapper> pWrapper) = 0;
-  virtual txn::Status invoke(const std::string& serviceName, Payload_t payload) = 0;
+  virtual void registerService(ServiceList serviceNames, std::shared_ptr<IStandardWrapper> pWrapper) = 0;
+  virtual Status invoke(const std::string& serviceName, StandardPayload& payload) = 0;
+  virtual void registerService(ServiceList serviceNames, std::shared_ptr<ITokenWrapper> pWrapper) = 0;
+  virtual Status invoke(const std::string& serviceName, TokenPayload& payload) = 0;
 };
 
 } // namespace svc

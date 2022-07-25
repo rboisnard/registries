@@ -8,11 +8,13 @@ Registry::Registry() {
 }
 Registry::~Registry() {}
 
-Status Registry::invokeStandard(const std::string& serviceName, const StandardPayload& payload) {
+Status Registry::invokeStandard(const std::string& serviceName, StandardPayload& payload) {
+  payload.setServiceName(serviceName);
   return this->_pImpl->invokeStandard(serviceName, payload);
 }
 
-Status Registry::invokeToken(const std::string& serviceName, const TokenPayload& payload) {
+Status Registry::invokeToken(const std::string& serviceName, TokenPayload& payload) {
+  payload.setServiceName(serviceName);
   return this->_pImpl->invokeToken(serviceName, payload);
 }
 
