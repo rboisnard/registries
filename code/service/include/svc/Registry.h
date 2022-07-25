@@ -107,7 +107,7 @@ inline void Registry::registerService(ServiceList serviceNames, Status (T::*meth
 }
 
 // other definitions
-typedef void (*initializer_t)(Registry&);
+typedef bool (*initializer_t)(Registry&);
 typedef bool (*finalizer_t)();
 
 } // namespace svc

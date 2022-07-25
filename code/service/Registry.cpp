@@ -52,6 +52,7 @@ bool initLibrary(txn::Registry& registry) {
 
   registryLibraryHandle = dlopen(appLibraryName, RTLD_NOW);
   if (!registryLibraryHandle) {
+    // lib not found or missing dependencies
     return false;
   }
   // reset errors
@@ -64,9 +65,7 @@ bool initLibrary(txn::Registry& registry) {
   }
 
   svc::registryInstance.setTxnRegistry(registry);
-  initializer(svc::registryInstance);
-
-  return true;
+  return initializer(svc::registryInstance);
 }
 
 extern "C"
@@ -75,6 +74,7 @@ bool closeLibrary() {
     char* appFinalizerName = std::getenv("APP_FINALIZER_NAME");
     if (!appFinalizerName) {
       // env var not found
+      dlclose(registryLibraryHandle);
       return false;
     }
 

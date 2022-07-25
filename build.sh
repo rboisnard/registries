@@ -13,6 +13,7 @@ TARGETS="
   code/service/test:test_adapters_layer2
   code/service/test:test_direct_registry_layer2
   code/service/test:test_indirect_registry_layer2
+  code/service/test:test_registry_layer2
 "
 
 ### functions

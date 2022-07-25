@@ -39,8 +39,6 @@ svc::Status ServiceC::methodA(svc::StandardPayload& payload) {
   return svc::Status(0, stream.str());
 }
 
-//extern svc::Registry svc::registryInstance;
-
 extern "C"
 bool registerTxnServices(txn::Registry registry) {
   svc::registryInstance.setTxnRegistry(registry);

@@ -74,14 +74,13 @@ add_test(
   NAME test_direct_registry_layer2
   COMMAND test_direct_registry_layer2
 )
-
 set_property(TEST test_direct_registry_layer2
   PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/service/test"
 )
 
 # test_indirect_registry
 add_executable(test_indirect_registry_layer2)
-add_dependencies (test_indirect_registry_layer2 exampleservices)
+add_dependencies(test_indirect_registry_layer2 exampleservices)
 target_sources(test_indirect_registry_layer2
   PRIVATE
   test_indirect_registry.cpp
@@ -102,4 +101,22 @@ string(JOIN ";" env_vars ${env_vars} "APP_INITILIZER_NAME=registerSvcServices")
 string(JOIN ";" env_vars ${env_vars} "APP_FINALIZER_NAME=finalizeServices")
 set_property(TEST test_indirect_registry_layer2
   PROPERTY ENVIRONMENT ${env_vars}
+)
+
+# test_registry_layer2
+add_executable(test_registry_layer2)
+target_sources(test_registry_layer2
+  PRIVATE
+  test_registry.cpp
+)
+target_link_libraries(test_registry_layer2
+  GTest::gtest_main
+  service
+)
+add_test(
+  NAME test_registry_layer2
+  COMMAND test_registry_layer2
+)
+set_property(TEST test_registry_layer2
+  PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/code/service:${CMAKE_BINARY_DIR}/code/service/test"
 )

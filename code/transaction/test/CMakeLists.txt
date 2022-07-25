@@ -45,7 +45,7 @@ add_test(
 
 # test_indirect_registry
 add_executable(test_indirect_registry)
-add_dependencies (test_indirect_registry exampleservices)
+add_dependencies(test_indirect_registry exampleservices)
 target_sources(test_indirect_registry
   PRIVATE
   test_indirect_registry.cpp
