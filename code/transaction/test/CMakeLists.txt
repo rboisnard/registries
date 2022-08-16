@@ -8,6 +8,9 @@ target_link_libraries(test_status
   GTest::gtest_main
   transaction
 )
+target_compile_options(test_status PRIVATE
+  -Wall -Wextra -Werror
+)
 add_test(
   NAME test_status
   COMMAND test_status
@@ -25,6 +28,9 @@ target_sources(exampleservices
 target_link_libraries(exampleservices
   transaction
 )
+target_compile_options(exampleservices PRIVATE
+  -Wall -Wextra -Werror
+)
 
 # test_direct_registry
 add_executable(test_direct_registry)
@@ -37,6 +43,9 @@ target_link_libraries(test_direct_registry
   GTest::gtest_main
   transaction
   exampleservices
+)
+target_compile_options(test_direct_registry PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_direct_registry
@@ -54,6 +63,9 @@ target_sources(test_indirect_registry
 target_link_libraries(test_indirect_registry
   GTest::gtest_main
   transaction
+)
+target_compile_options(test_indirect_registry PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_indirect_registry

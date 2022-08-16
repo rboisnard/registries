@@ -25,5 +25,8 @@ target_include_directories(transaction
   PUBLIC
   include
 )
+target_compile_options(transaction PRIVATE
+  -Wall -Wextra -Werror
+)
 
 add_subdirectory(test)

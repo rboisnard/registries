@@ -8,6 +8,9 @@ target_link_libraries(test_status_layer2
   GTest::gtest_main
   service
 )
+target_compile_options(test_status_layer2 PRIVATE
+  -Wall -Wextra -Werror
+)
 add_test(
   NAME test_status_layer2
   COMMAND test_status_layer2
@@ -22,6 +25,9 @@ target_sources(test_payloads_layer2
 target_link_libraries(test_payloads_layer2
   GTest::gtest_main
   service
+)
+target_compile_options(test_payloads_layer2 PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_payloads_layer2
@@ -41,6 +47,9 @@ target_link_libraries(test_adapters_layer2
   GTest::gtest_main
   service
 )
+target_compile_options(test_adapters_layer2 PRIVATE
+  -Wall -Wextra -Werror
+)
 add_test(
   NAME test_adapters_layer2
   COMMAND test_adapters_layer2
@@ -58,6 +67,9 @@ target_sources(exampleservices_layer2
 target_link_libraries(exampleservices_layer2
   service
 )
+target_compile_options(exampleservices_layer2 PRIVATE
+  -Wall -Wextra -Werror
+)
 
 # test_direct_registry
 add_executable(test_direct_registry_layer2)
@@ -69,6 +81,9 @@ target_sources(test_direct_registry_layer2
 target_link_libraries(test_direct_registry_layer2
   GTest::gtest_main
   exampleservices_layer2
+)
+target_compile_options(test_direct_registry_layer2 PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_direct_registry_layer2
@@ -89,6 +104,9 @@ target_sources(test_indirect_registry_layer2
 target_link_libraries(test_indirect_registry_layer2
   GTest::gtest_main
   transaction
+)
+target_compile_options(test_indirect_registry_layer2 PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_indirect_registry_layer2
@@ -112,6 +130,9 @@ target_sources(test_registry_layer2
 target_link_libraries(test_registry_layer2
   GTest::gtest_main
   service
+)
+target_compile_options(test_registry_layer2 PRIVATE
+  -Wall -Wextra -Werror
 )
 add_test(
   NAME test_registry_layer2

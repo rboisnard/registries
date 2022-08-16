@@ -35,5 +35,8 @@ target_include_directories(service
 target_link_libraries(service
   transaction
 )
+target_compile_options(service PRIVATE
+  -Wall -Wextra -Werror
+)
 
 add_subdirectory(test)
