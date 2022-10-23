@@ -5,13 +5,11 @@
 #include "svc/TokenPayload.h"
 
 TEST(Payloads, class) {
-  svc::StandardPayload standardPayload("unused");
-  standardPayload.setServiceName("standard_service");
-  EXPECT_THAT(standardPayload.serviceName(), ::testing::StrEq("standard_service"));
+  svc::StandardPayload standardPayload("standard_payload");
+  EXPECT_THAT(standardPayload.data(), ::testing::StrEq("standard_payload"));
 
-  svc::TokenPayload tokenPayload("unused");
-  tokenPayload.setServiceName("token_service");
-  EXPECT_THAT(tokenPayload.serviceName(), ::testing::StrEq("token_service"));
+  svc::TokenPayload tokenPayload("token_payload");
+  EXPECT_THAT(tokenPayload.data(), ::testing::StrEq("token_payload"));
 
   tokenPayload.setToken("token");
   EXPECT_THAT(tokenPayload.token(), ::testing::StrEq("token"));

@@ -12,9 +12,9 @@ public:
   RegistryImpl();
   ~RegistryImpl();
 
-  void registerService(ServiceList serviceNames, std::shared_ptr<IStandardWrapper> pWrapper) override;
+  void registerService(const std::string& serviceName, std::shared_ptr<IStandardWrapper> pWrapper) override;
   Status invoke(const std::string& serviceName, StandardPayload& payload) override;
-  void registerService(ServiceList serviceNames, std::shared_ptr<ITokenWrapper> pWrapper) override;
+  void registerService(const std::string& serviceName, std::shared_ptr<ITokenWrapper> pWrapper) override;
   Status invoke(const std::string& serviceName, TokenPayload& payload) override;
 
 private:

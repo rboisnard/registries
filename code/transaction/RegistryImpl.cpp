@@ -10,8 +10,7 @@ void RegistryImpl::registerStandard(const std::string& serviceName, std::shared_
 }
 
 Status RegistryImpl::invokeStandard(const std::string& serviceName, StandardPayload& payload) {
-  // TODO: C++20 replace std::map::find() by std::map::contains()
-  if (this->_standardMap.find(serviceName) == this->_standardMap.end()) {
+  if (!this->_standardMap.contains(serviceName)) {
     // service not found, return early
     // TODO: add error handling
     return Status(1, "service not found");
@@ -26,8 +25,7 @@ void RegistryImpl::registerToken(const std::string& serviceName, std::shared_ptr
 }
 
 Status RegistryImpl::invokeToken(const std::string& serviceName, TokenPayload& payload) {
-  // TODO: C++20 replace std::map::find() by std::map::contains()
-  if (this->_tokenMap.find(serviceName) == this->_tokenMap.end()) {
+  if (!this->_tokenMap.contains(serviceName)) {
     // service not found, return early
     // TODO: add error handling
     return Status(1, "service not found");

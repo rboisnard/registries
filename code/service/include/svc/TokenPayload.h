@@ -15,13 +15,9 @@ public:
   std::string token() const;
   void setToken(std::string token);
 
-  std::string serviceName();
-  void setServiceName(std::string serviceName);
-
 private:
   const std::string _data;
   std::string _token;
-  std::string _serviceName;
 };
 
 } // namespace svc

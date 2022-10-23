@@ -11,7 +11,7 @@ namespace svc {
 
 class IStandardWrapper {
 public:
-  virtual Status invoke(Service& service, StandardPayload& payload) = 0;
+  virtual Status invoke(Service& service, const std::string& serviceName, StandardPayload& payload) = 0;
   virtual std::shared_ptr<Service> createService() = 0;
 };
 

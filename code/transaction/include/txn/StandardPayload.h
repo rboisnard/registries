@@ -12,12 +12,8 @@ public:
 
   const std::string data() const;
 
-  std::string serviceName();
-  void setServiceName(std::string serviceName);
-
 private:
   const std::string _data;
-  std::string _serviceName;
 };
 
 } // namespace txn

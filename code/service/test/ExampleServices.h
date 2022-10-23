@@ -7,14 +7,14 @@
 
 class ServiceA : public svc::Service {
 public:
-  svc::Status methodA(svc::StandardPayload& payload);
-  svc::Status methodB(svc::StandardPayload& payload);
+  svc::Status methodA([[maybe_unused]] const std::string& serviceName, svc::StandardPayload& payload);
+  svc::Status methodB([[maybe_unused]] const std::string& serviceName, svc::StandardPayload& payload);
 };
 
 class ServiceB : public svc::Service {
 public:
-  svc::Status methodA(svc::StandardPayload& payload);
-  svc::Status methodB(svc::TokenPayload& payload);
+  svc::Status methodA([[maybe_unused]] const std::string& serviceName, svc::StandardPayload& payload);
+  svc::Status methodB([[maybe_unused]] const std::string& serviceName, svc::TokenPayload& payload);
 };
 
 class ServiceC : public svc::Service {
@@ -22,7 +22,7 @@ public:
   ServiceC();
   ~ServiceC();
 
-  svc::Status methodA(svc::StandardPayload& payload);
+  svc::Status methodA([[maybe_unused]] const std::string& serviceName, svc::StandardPayload& payload);
 
 private:
   std::string _internalString;

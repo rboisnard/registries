@@ -3,21 +3,15 @@
 namespace svc {
 
 TxnStandardPayloadAdapter::TxnStandardPayloadAdapter(StandardPayload payload)
-    : StandardPayload(payload.data()) {
-  this->setServiceName(payload.serviceName());
-}
+    : StandardPayload(payload.data()) {}
 
 TxnStandardPayloadAdapter::TxnStandardPayloadAdapter(txn::StandardPayload payload)
-    : StandardPayload(payload.data()) {
-  this->setServiceName(payload.serviceName());
-}
+    : StandardPayload(payload.data()) {}
 
 TxnStandardPayloadAdapter::~TxnStandardPayloadAdapter() {}
 
 txn::StandardPayload TxnStandardPayloadAdapter::asTxnStandardPayload() {
-  txn::StandardPayload payload(this->data());
-  payload.setServiceName(this->serviceName());
-  return payload;
+  return txn::StandardPayload(this->data());
 }
 
 } // namespace svc

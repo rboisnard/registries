@@ -11,7 +11,7 @@ namespace svc {
 
 class ITokenWrapper {
 public:
-  virtual Status invoke(Service& service, TokenPayload& payload) = 0;
+  virtual Status invoke(Service& service, const std::string& serviceName, TokenPayload& payload) = 0;
   virtual std::shared_ptr<Service> createService() = 0;
 };
 

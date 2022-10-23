@@ -110,6 +110,14 @@ build_for_type() {
 
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 
+if [ $# -gt 0 ]; then
+  while [ $# -gt 0 ]; do
+    build_for_type $1
+    shift
+  done
+  exit 0
+fi
+
 build_for_type Asan
 build_for_type Lsan
 build_for_type GCov

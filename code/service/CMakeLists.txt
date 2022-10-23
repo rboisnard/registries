@@ -4,7 +4,6 @@ target_sources(service
   Registry.cpp
   RegistryImpl.cpp
   Service.cpp
-  ServiceList.cpp
   StandardPayload.cpp
   Status.cpp
   TokenPayload.cpp
@@ -22,7 +21,6 @@ target_sources(service
   include/svc/ITokenWrapper.h
   include/svc/Registry.h
   include/svc/Service.h
-  include/svc/ServiceList.h
   include/svc/StandardPayload.h
   include/svc/Status.h
   include/svc/TokenPayload.h
