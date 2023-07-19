@@ -7,9 +7,9 @@ endif()
 if(NOT "Lsan" IN_LIST CMAKE_CONFIGURATION_TYPES)
   list(APPEND CMAKE_CONFIGURATION_TYPES Asan)
 endif()
-  if(NOT "GCov" IN_LIST CMAKE_CONFIGURATION_TYPES)
-    list(APPEND CMAKE_CONFIGURATION_TYPES GCov)
-  endif()
+if(NOT "GCov" IN_LIST CMAKE_CONFIGURATION_TYPES)
+  list(APPEND CMAKE_CONFIGURATION_TYPES GCov)
+endif()
 else()
   set(allowedBuildTypes Asan Lsan GCov Debug Release)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowedBuildTypes}")
@@ -21,11 +21,11 @@ endif()
 
 # Address sanitizer
 set(CMAKE_C_FLAGS_ASAN
-  "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer" CACHE STRING
+  "${CMAKE_C_FLAGS_DEBUG} -O3 -fsanitize=address -fno-omit-frame-pointer" CACHE STRING
   "Flags used by the C compiler for Asan build type or configuration." FORCE)
 
 set(CMAKE_CXX_FLAGS_ASAN
-  "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer" CACHE STRING
+  "${CMAKE_CXX_FLAGS_DEBUG} -O3 -fsanitize=address -fno-omit-frame-pointer" CACHE STRING
   "Flags used by the C++ compiler for Asan build type or configuration." FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS_ASAN
@@ -38,11 +38,11 @@ set(CMAKE_SHARED_LINKER_FLAGS_ASAN
 
 # Leak sanitizer
 set(CMAKE_C_FLAGS_LSAN
-  "${CMAKE_C_FLAGS_DEBUG} -fsanitize=leak -fno-omit-frame-pointer" CACHE STRING
+  "${CMAKE_C_FLAGS_DEBUG} -O3 -fsanitize=leak -fno-omit-frame-pointer" CACHE STRING
   "Flags used by the C compiler for Lsan build type or configuration." FORCE)
 
 set(CMAKE_CXX_FLAGS_LSAN
-  "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak -fno-omit-frame-pointer" CACHE STRING
+  "${CMAKE_CXX_FLAGS_DEBUG} -O3 -fsanitize=leak -fno-omit-frame-pointer" CACHE STRING
   "Flags used by the C++ compiler for Lsan build type or configuration." FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS_LSAN
@@ -61,3 +61,11 @@ set(CMAKE_C_FLAGS_GCOV
 set(CMAKE_CXX_FLAGS_GCOV
   "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
   "Flags used by the C++ compiler for GCov build type or configuration." FORCE)
+
+set(CMAKE_EXE_LINKER_FLAGS_GCOV
+  "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage" CACHE STRING
+  "Linker flags to be used to create executables for GCov build type." FORCE)
+
+set(CMAKE_SHARED_LINKER_FLAGS_GCOV
+  "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage" CACHE STRING
+  "Linker lags to be used to create shared libraries for GCov build type." FORCE)

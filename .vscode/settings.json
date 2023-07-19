@@ -1,5 +1,6 @@
 {
   "cmake.configureOnOpen": true,
+  "cmake.buildDirectory": "${workspaceFolder}/builds/${buildType}",
   "files.associations": {
     "array": "cpp",
     "atomic": "cpp",
@@ -43,6 +44,16 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "typeindex": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "sstream": "cpp",
+    "map": "cpp",
+    "istream": "cpp",
+    "variant": "cpp",
+    "any": "cpp",
+    "ctime": "cpp",
+    "set": "cpp",
+    "optional": "cpp",
+    "iomanip": "cpp",
+    "iostream": "cpp"
   }
 }

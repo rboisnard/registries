@@ -2,30 +2,37 @@
 
 namespace txn {
 
+RegistryImpl::RegistryImpl() {}
+RegistryImpl::~RegistryImpl() {}
+
 void RegistryImpl::registerStandard(const std::string& serviceName, std::shared_ptr<IStandardWrapper> pWrapper) {
   this->_standardMap[serviceName] = pWrapper;
 }
 
-void RegistryImpl::invokeStandard(const std::string serviceName, const StandardPayload& payload) {
-  // TODO: C++20 replace std::map::find() by std::map::contains()
-  if (this->_standardMap.find(serviceName) == this->_standardMap.end()) {
+Status RegistryImpl::invokeStandard(const std::string& serviceName, StandardPayload& payload) {
+  if (!this->_standardMap.contains(serviceName)) {
     // service not found, return early
     // TODO: add error handling
+    return Status(1, "service not found");
   }
-  this->_standardMap[serviceName]->invokeStandard(payload);
+  IStandardWrapper* pStandardWrapper = this->_standardMap[serviceName].get();
+  std::shared_ptr<StandardService> pService = pStandardWrapper->createService();
+  return pStandardWrapper->invokeStandard(*pService, payload);
 }
 
 void RegistryImpl::registerToken(const std::string& serviceName, std::shared_ptr<ITokenWrapper> pWrapper) {
   this->_tokenMap[serviceName] = pWrapper;
 }
 
-void RegistryImpl::invokeToken(const std::string serviceName, const TokenPayload& payload) {
-  // TODO: C++20 replace std::map::find() by std::map::contains()
-  if (this->_tokenMap.find(serviceName) == this->_tokenMap.end()) {
+Status RegistryImpl::invokeToken(const std::string& serviceName, TokenPayload& payload) {
+  if (!this->_tokenMap.contains(serviceName)) {
     // service not found, return early
     // TODO: add error handling
+    return Status(1, "service not found");
   }
-  this->_tokenMap[serviceName]->invokeToken(payload);
+  ITokenWrapper* pTokenWrapper = this->_tokenMap[serviceName].get();
+  std::shared_ptr<TokenService> pService = pTokenWrapper->createService();
+  return pTokenWrapper->invokeToken(*pService, payload);
 }
 
 } // namespace txn
